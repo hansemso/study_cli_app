@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "group": "1",
@@ -9,4 +10,17 @@
     "q": "def square_result(fx):\n    def wrapper(u):\n        result = fx(u)\n        return result ** 2   # raise to power 2\n\n    return wrapper\n\n\n@square_result\ndef add_one(u):\n    return u + 1\n\n\nprint(add_one(3))",
     "a": "i'll be back!"
   }
+=======
+[
+  {
+    "group": "1",
+    "q": "Given:\n \ndef decorator(f):\n    def wrapper(i):\n        return f(i) + ' ' + 'world!'\n    return wrapper\n\n@decorator\ndef greet(i):\n    return 'Hello'\n\nAnswer the following questions. Press [Enter] after each answer.\n\nWhat will be the return? (lowercase only)\nWhich function is executed last?\nDesugar @decorator using greet_new as the new function (no white_space)",
+    "a": "hello world!;greet;greet_new=decorator(greet)"
+  },
+  {
+    "group": "2",
+    "q": "def square_result(fx):\n    def wrapper(u):\n        result = fx(u)\n        return result ** 2   # raise to power 2\n\n    return wrapper\n\n\n@square_result\ndef add_one(u):\n    return u + 1\n\n\nprint(add_one(3))",
+    "a": "i'll be back!"
+  }
+>>>>>>> e97a068 (Upload study CLI quiz app)
 ]
