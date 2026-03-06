@@ -1,7 +1,24 @@
 [
   {
-    "group": "1",
-    "q": "Given:\n\ndef decorator(func):\n    def wrapper(a, b):\n        return func(a, b) * 10\n    return wrapper  #\n\n@decorator\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))\n\nWill be adding question.",
-    "a": "i'll be back!"
+    "id": "1",
+    "code": "#  ***  @decorators w math ***\n\ndef decorator(fx):\n    def wrapper(a, b):\n        return fx(a, b) * 10\n    return wrapper  \n\n@decorator\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))",
+    "qa": [
+      {
+        "question": "Which function is the kernel/innermost function?",
+        "answer": "add"
+      },
+      {
+        "question": "Which function executes last?",
+        "answer": "decorator"
+      },
+      {
+        "question": "Which function contains the outer operation?",
+        "answer": "wrapper"
+      },
+      {
+        "question": "What is the output?",
+        "answer": "50"
+      }
+    ]
   }
 ]

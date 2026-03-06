@@ -1,202 +1,160 @@
-import random
 import sys
 import json
+import os
 from typing import List, Dict, Any
 
-#====================================================
-# Configuration
-#====================================================
+# ===============================
+# Storage
+# ===============================
 
-STORAGE_FILE = "study_cards.json"
 study_bank: List[Dict[str, Any]] = []
 
-#====================================================
-# Utility Functions
-#====================================================
+# ===============================
+# Utility
+# ===============================
 
 def normalize(text: str | None) -> str:
-    """Normalize user input for comparison."""
     return (text or "").strip().lower()
 
+# ===============================
+# File Storage
+# ===============================
 
-def render_text(text: str | None) -> str:
-    """Safely render text fields."""
-    return text or ""
-
-#====================================================
-# Storage Layer
-#====================================================
-
-def load_cards() -> None:
-    """Load cards from JSON storage."""
+def load_cards():
 
     global study_bank
 
+    path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "study_cards.json"
+    )
+
     try:
-        with open(STORAGE_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            if isinstance(data, list):
-                study_bank = data
-            else:
-                study_bank = []
+        with open(path, "r", encoding="utf-8") as f:
+            study_bank = json.load(f)
 
-    except FileNotFoundError:
+    except:
         study_bank = []
 
-    except json.JSONDecodeError:
-        print("Warning: Storage file corrupted. Starting fresh.")
-        study_bank = []
+def save_all_cards():
 
+    path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "study_cards.json"
+    )
 
-def save_all_cards() -> None:
-    """Persist cards to JSON storage."""
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(study_bank, f, indent=2, ensure_ascii=False)
 
-    with open(STORAGE_FILE, "w", encoding="utf-8") as f:
-        json.dump(study_bank, f, ensure_ascii=False, indent=2)
+# ===============================
+# Multiline Input
+# ===============================
 
-#=====================================================
-# Quiz Engine
-#=====================================================
+def multiline_input(prompt="Enter text (END to finish):"):
 
-def quiz_mode() -> None:
-    """Run quiz session."""
+    print(prompt)
+
+    lines = []
+
+    while True:
+        line = input()
+
+        if line.strip().upper() == "END":
+            break
+
+        lines.append(line)
+
+    return "\n".join(lines)
+
+# ===============================
+# Quiz Mode
+# ===============================
+
+def quiz_mode():
 
     if not study_bank:
         print("No cards available.")
         return
 
-    # Group cards by group id
-    groups: Dict[str, List[Dict[str, Any]]] = {}
-
-    for card in study_bank:
-        groups.setdefault(card.get("group", "0"), []).append(card)
-
-    group_list = list(groups.values())
-    random.shuffle(group_list)
-
     score = 0
-    total = len(study_bank)
+    total = 0
 
-    print("\n=== Quiz Mode ===")
-    print("Press Ctrl+C to exit.\n")
+    print("\n=== Quiz Mode ===\n")
 
     try:
-        for group in group_list:
-            random.shuffle(group)
 
-            for card in group:
+        for card in study_bank:
 
-                question = render_text(card.get("q"))
-                answer = card.get("a", "")
+            print(card.get("code", ""))
 
-                print(question)
+            qa_list = card.get("qa", [])
 
-                # Multi-answer card support
-                if answer and ";" in answer:
+            total += len(qa_list)
 
-                    correct_answers = [normalize(x) for x in answer.split(";")]
+            for qa in qa_list:
 
-                    user_answers = [
-                        input("> ")
-                        for _ in range(len(correct_answers))
-                    ]
+                print(qa.get("question", ""))
 
-                    correct = sum(
-                        normalize(u) == c
-                        for u, c in zip(user_answers, correct_answers)
-                    )
-
-                    if correct == len(correct_answers):
-                        print("✔ Correct\n")
-                        score += 1
-                    else:
-                        print(f"✘ Wrong (Answer: {';'.join(correct_answers)})\n")
-
-                # Single answer card
+                if normalize(input("> ")) == normalize(qa.get("answer", "")):
+                    print("✔ Correct\n")
+                    score += 1
                 else:
-                    user = input("> ")
-
-                    if normalize(user) == normalize(answer):
-                        print("✔ Correct\n")
-                        score += 1
-                    else:
-                        print(f"✘ Wrong (Answer: {answer})\n")
+                    print(f"✘ Wrong (Answer: {qa.get('answer','')})\n")
 
         print(f"\nScore: {score} / {total}")
 
     except KeyboardInterrupt:
         print(f"\nQuiz terminated. Score: {score} / {total}")
 
-#====================================================
-# Card Management
-#======================================================
+# ===============================
+# Add Card
+# ===============================
 
-def add_study_card() -> None:
-    """Add new study card interactively."""
+def add_study_card():
 
     print("\n=== Add New Study Card ===")
 
-    group = input("Enter card number (1,2,3...): ").strip()
+    card_id = input("Enter card ID: ").strip()
 
-    if not group.isdigit():
-        print("Card number must be numeric.")
+    if any(card.get("id") == card_id for card in study_bank):
+        print("Duplicate ID!")
         return
 
-    question = multiline_input("Enter question (END to finish):")
-    answer = multiline_input("Enter answer (END to finish):")
+    code = multiline_input("Enter code (END to finish):")
 
-    if not question or not answer:
-        print("Invalid input!")
-        return
+    qa_list = []
 
-    # Normalize multi-line answer into semicolon-separated format
-    answer = ";".join(
-        x.strip().lower()
-        for x in answer.split("\n") if x.strip()
-    )
+    print("\nEnter QA pairs (END as question to stop)")
+
+    while True:
+
+        q = input("Question: ").strip()
+
+        if q.upper() == "END":
+            break
+
+        a = input("Answer: ").strip()
+
+        if q and a:
+            qa_list.append({
+            "question": q.strip(),
+            "answer": a.strip()
+        })
 
     study_bank.append({
-        "group": group,
-        "q": question.strip(),
-        "a": answer
+        "id": card_id,
+        "code": code,
+        "qa": qa_list
     })
 
     save_all_cards()
     print("Card added!")
 
-#=====================================================
-# Input Helper
-#=====================================================
+# ===============================
+# Edit Card (Stable Version ⭐)
+# ===============================
 
-def multiline_input(prompt: str = "Enter text (END to finish):") -> str:
-    """Capture multi-line user input."""
-
-    print(prompt)
-
-    lines: List[str] = []
-
-    while True:
-        try:
-            line = input()
-
-            if line.strip().upper() == "END":
-                break
-
-            lines.append(line)
-
-        except EOFError:
-            break
-
-    return "\n".join(lines)
-
-
-
-#====================================================
-# Edit Card
-#====================================================
-
-def edit_card() -> None:
-    """Edit an existing study card."""
+def edit_card():
 
     if not study_bank:
         print("No cards available.")
@@ -206,62 +164,77 @@ def edit_card() -> None:
 
     # Show card list
     for i, card in enumerate(study_bank, start=1):
-        preview = card.get("q", "").split("\n")[0]
-        print(f"{i}. {preview}")
+        print(f"{i}. {card.get('code','').split('\\n')[0]}")
 
     try:
-        choice = int(input("\nSelect card number: ").strip())
-    except ValueError:
+        choice = int(input("\nSelect card number: ")) - 1
+    except:
         print("Invalid input.")
         return
 
-    if choice < 1 or choice > len(study_bank):
+    if choice < 0 or choice >= len(study_bank):
         print("Card not found.")
         return
 
-    card = study_bank[choice - 1]
+    card = study_bank[choice]
 
-    print("\nCurrent Question:\n")
-    print(card["q"])
-
-    print("\nCurrent Answer:")
-    print(card["a"])
-
-    print("\n1 Edit Question")
-    print("2 Edit Answer")
+    print("\n1 Edit Code")
+    print("2 Edit QA Answer")
     print("3 Delete Card")
     print("4 Cancel")
 
     action = input("Select option: ").strip()
 
+    # ======================
     if action == "1":
 
-        new_q = multiline_input("Enter new question (END to finish):")
+        new_code = multiline_input("Enter new code (END to finish):")
 
-        if new_q.strip():
-            card["q"] = new_q.strip()
+        if new_code.strip():
+            card["code"] = new_code.strip()
             save_all_cards()
-            print("Question updated.")
+            print("Code updated.")
+
+    # ======================
+    
 
     elif action == "2":
 
-        new_a = multiline_input("Enter new answer (END to finish):")
+        qa_list = card.get("qa", [])
 
-        if new_a.strip():
-            card["a"] = ";".join(
-                x.strip().lower()
-                for x in new_a.split("\n") if x.strip()
-            )
+        if not qa_list:
+            print("No QA list.")
+            return
 
+        print("\nQA List:")
+
+        for i, qa in enumerate(qa_list, start=1):
+            print(f"{i}. {qa.get('question','')}")
+
+        try:
+            qa_index = int(input("QA number: ").strip()) - 1
+        except:
+            print("Invalid QA selection.")
+            return
+
+        if qa_index < 0 or qa_index >= len(qa_list):
+            print("QA not found.")
+            return
+
+        new_answer = input("New answer: ").strip()
+
+        if new_answer:
+            qa_list[qa_index]["answer"] = new_answer.strip()
+            card["qa"] = qa_list
             save_all_cards()
             print("Answer updated.")
 
+
+    # ======================
     elif action == "3":
 
-        confirm = input("Delete this card? (y/n): ").lower()
-
-        if confirm == "y":
-            study_bank.pop(choice - 1)
+        if input("Delete card? (y/n): ").lower() == "y":
+            study_bank.pop(choice)
             save_all_cards()
             print("Card deleted.")
 
@@ -269,11 +242,11 @@ def edit_card() -> None:
         print("Cancelled.")
 
 
-#====================================================
-#             MAIN_MENU
-#=====================================================
+# ===============================
+# Main Menu
+# ===============================
 
-def main_menu() -> None:
+def main_menu():
 
     while True:
 
@@ -283,7 +256,7 @@ def main_menu() -> None:
         print("3. Edit Card")
         print("4. Exit")
 
-        choice = input("Select option: ").strip()
+        choice = input("Select option: ")
 
         if choice == "1":
             quiz_mode()
@@ -300,7 +273,7 @@ def main_menu() -> None:
         else:
             print("Invalid choice")
 
-#====================================================
+# ===============================
 
 if __name__ == "__main__":
     load_cards()
