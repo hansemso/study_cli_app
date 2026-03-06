@@ -189,39 +189,89 @@ def multiline_input(prompt: str = "Enter text (END to finish):") -> str:
 
     return "\n".join(lines)
 
-#====================================================
-# Search Mode
-#=====================================================
 
-def search_cards() -> None:
-    """Search cards by keyword."""
+
+#====================================================
+# Edit Card
+#====================================================
+
+def edit_card() -> None:
+    """Edit an existing study card."""
 
     if not study_bank:
         print("No cards available.")
         return
 
-    keyword = input("Search keyword: ").strip().lower()
+    print("\n=== Edit Card ===\n")
 
-    if not keyword:
-        print("Empty keyword.")
+    # Show card list
+    for i, card in enumerate(study_bank, start=1):
+        preview = card.get("q", "").split("\n")[0]
+        print(f"{i}. {preview}")
+
+    try:
+        choice = int(input("\nSelect card number: ").strip())
+    except ValueError:
+        print("Invalid input.")
         return
 
-    results = [
-        card for card in study_bank
-        if keyword in card.get("q", "").lower()
-        or keyword in card.get("a", "").lower()
-    ]
+    if choice < 1 or choice > len(study_bank):
+        print("Card not found.")
+        return
 
-    print(f"\nFound {len(results)} cards\n")
+    card = study_bank[choice - 1]
 
-    for card in results:
-        print(card.get("q"))
-        print("Answer:", card.get("a"))
-        print("---")
+    print("\nCurrent Question:\n")
+    print(card["q"])
+
+    print("\nCurrent Answer:")
+    print(card["a"])
+
+    print("\n1 Edit Question")
+    print("2 Edit Answer")
+    print("3 Delete Card")
+    print("4 Cancel")
+
+    action = input("Select option: ").strip()
+
+    if action == "1":
+
+        new_q = multiline_input("Enter new question (END to finish):")
+
+        if new_q.strip():
+            card["q"] = new_q.strip()
+            save_all_cards()
+            print("Question updated.")
+
+    elif action == "2":
+
+        new_a = multiline_input("Enter new answer (END to finish):")
+
+        if new_a.strip():
+            card["a"] = ";".join(
+                x.strip().lower()
+                for x in new_a.split("\n") if x.strip()
+            )
+
+            save_all_cards()
+            print("Answer updated.")
+
+    elif action == "3":
+
+        confirm = input("Delete this card? (y/n): ").lower()
+
+        if confirm == "y":
+            study_bank.pop(choice - 1)
+            save_all_cards()
+            print("Card deleted.")
+
+    else:
+        print("Cancelled.")
+
 
 #====================================================
-# Application Entry
-#====================================================
+#             MAIN_MENU
+#=====================================================
 
 def main_menu() -> None:
 
@@ -230,7 +280,7 @@ def main_menu() -> None:
         print("\n==== Study CLI App ====")
         print("1. Quiz Mode")
         print("2. Add Card")
-        print("3. Search Cards")
+        print("3. Edit Card")
         print("4. Exit")
 
         choice = input("Select option: ").strip()
@@ -242,7 +292,7 @@ def main_menu() -> None:
             add_study_card()
 
         elif choice == "3":
-            search_cards()
+            edit_card()
 
         elif choice == "4":
             sys.exit(0)
