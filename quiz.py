@@ -87,7 +87,7 @@ def quiz_mode():
 
             print(card.get("code", ""))
 
-            qa_list = card.get("qa", [])
+            qa_list = card.get("qa", [])  #90
 
             total += len(qa_list)
 
@@ -212,7 +212,7 @@ def edit_card():
             print(f"{i}. {qa.get('question','')}")
 
         try:
-            qa_index = int(input("QA number: ").strip()) - 1
+            qa_index = int(input("QA number: ").strip()) - 1  # i.e. 'number' of question above to edit.  
         except:
             print("Invalid QA selection.")
             return
@@ -221,16 +221,20 @@ def edit_card():
             print("QA not found.")
             return
 
+        print("\nCurrent Answer:")
+        print(qa_list[qa_index].get("answer",""))
+
         new_answer = input("New answer: ").strip()
 
         if new_answer:
-            qa_list[qa_index]["answer"] = new_answer.strip()
+            qa_list[qa_index]["answer"] = new_answer
             card["qa"] = qa_list
             save_all_cards()
             print("Answer updated.")
 
 
     # ======================
+
     elif action == "3":
 
         if input("Delete card? (y/n): ").lower() == "y":

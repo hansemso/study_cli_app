@@ -1,23 +1,33 @@
 [
   {
     "id": "1",
-    "code": "#  ***  @decorators w math ***\n\ndef decorator(fx):\n    def wrapper(a, b):\n        return fx(a, b) * 10\n    return wrapper  \n\n@decorator\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))",
+    "code": "#  ***  @decorators w math ***\n\ndef decorator(func):\n    def wrapper(a, b):\n        return func(a, b) * 10\n    return wrapper\n\n@decorator\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))\n\n",
     "qa": [
       {
         "question": "Which function is the kernel/innermost function?",
         "answer": "add"
       },
       {
-        "question": "Which function executes last?",
+        "question": "Which function is the outermost function?",
         "answer": "decorator"
       },
       {
-        "question": "Which function contains the outer operation?",
+        "question": "Which function contains all of the math?",
         "answer": "wrapper"
       },
       {
         "question": "What is the output?",
         "answer": "50"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "code": "#******* decorators again *******\n\nGiven:\n\ndef decoration\n    def wrapper\n\n",
+    "qa": [
+      {
+        "question": "Write its closest equivalent using new_wrapper and wrapper with no white_space       END",
+        "answer": "new_wrapper=decoration(wrapper)"
       }
     ]
   }
