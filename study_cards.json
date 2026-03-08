@@ -33,27 +33,27 @@
   },
   {
     "id": "3",
-    "code": "#***** JS_vs_Py_retrieval_1 *****\n\nCompare JS vs Py retrieval means:  \n\nconst j = prop.attr;      p = attr.mthd\nj();                      p() \n",
+    "code": "#***** JS_vs_Py_retrieval_1 *****\n\nCompare JS vs Py retrieval means:  \n\nconst j = prop.attr;      p = attr.mthd\nj();                      p()  \n",
     "qa": [
       {
-        "question": "Which operation has access but not binding? (js or py)",
+        "question": "Which operation has no automatic descriptor binding at access time? (js or py)",
         "answer": "js"
       },
       {
-        "question": "Which output could be unstable? (js or py)",
+        "question": "Which output uses context at call time instead of binding at access time? (js or py)",
         "answer": "js"
       },
       {
-        "question": "What is the name of the instance object?",
-        "answer": "p"
+        "question": "What is the name of the instance reference object?",
+        "answer": "attr"
       },
       {
         "question": "What is the function reference variable name?",
         "answer": "j"
       },
       {
-        "question": "Which Dunder method is called first and on which code object? (Type in exactly separated by a comma, no whitespace)",
-        "answer": "__dict__,attr"
+        "question": "*Bonus question: Internally, which dunder method is invoked first during attribute retrieval and on which object? (Type in exactly separated by a comma with no whitespace)",
+        "answer": "__getattribute__,attr"
       }
     ]
   }
