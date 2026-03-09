@@ -90,5 +90,39 @@
         "answer": "this,call"
       }
     ]
+  },
+  {
+    "id": "5",
+    "code": "#*** Py self vs JS this ***\n\n+-----------------------------+--------------------------------------+\n| Python                      | JavaScript                           |\n+-----------------------------+--------------------------------------+\n| class C:                    | class C {                            |\n|     def __init__():         |     constructor() {                  |\n|         self.self = self    |         this.u = this;               |\n|                             |     }                                |\n|     def mthd():             |     mthd() {                         |\n|         return self.self    |         return this.u;               |\n|                             |     }                                |\n| i = C()  # i = instance     | const i = new C();  // i = instance  |\n|                             |                                      | \n| print(i.mthd())             | console.log(i.mthd());               |\n| print(i.mthd() is i)        | console.log(i.mthd() === i);         |\n+-----------------------------+--------------------------------------+",
+    "qa": [
+      {
+        "question": "What will be the first print output? a)True b)False  c)TypeError d)self",
+        "answer": "c"
+      },
+      {
+        "question": "What will be the first console output? a)True b)False c)TypeError d)Circular",
+        "answer": "d"
+      },
+      {
+        "question": "What will be the second print output? a)True b)False c)TypeError d)self",
+        "answer": "c"
+      },
+      {
+        "question": "What will be the second console output?",
+        "answer": "true"
+      },
+      {
+        "question": "Let __init__(self)__ and mthd(self). What will be the first print output? a)TypeError b)self c)<__main__.C address> d)Circular",
+        "answer": "c"
+      },
+      {
+        "question": "Let  __init__(self)__ and mthd(self). What will be the second print output? a)True b)False c)TypeError d)<__main__.C address> e)self",
+        "answer": "a"
+      },
+      {
+        "question": "In which language is i.mthd() not bound?  (js/py)",
+        "answer": "js"
+      }
+    ]
   }
 ]
