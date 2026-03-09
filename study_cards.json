@@ -83,7 +83,7 @@
       },
       {
         "question": "Which language needs bind() to bind its reference object?  (py/js)",
-        "answer": "py"
+        "answer": "js"
       },
       {
         "question": "Which reference object can be hijacked by another function and when?  Fill in: ____ at ____ time.",
