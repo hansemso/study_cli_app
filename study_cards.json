@@ -56,5 +56,39 @@
         "answer": "__getattribute__,attr"
       }
     ]
+  },
+  {
+    "id": "4",
+    "code": "#*** Python Class vs JavaScript Class ***\n\n+---------------------------+---------------------------+\n| Python                    | JavaScript                |\n+---------------------------+---------------------------+\n| class C:                  | class C {                 |  \n|     def __init__(self):   |     constructor() {       |    \n|         self.x = 10       |         this.x = 10;      |  \n|                           |     }                     |\n|     def mthd(self):       |                           |  \n|         return self.x     |     mthd() {              |\n|                           |         return this.x;    |\n| p = C()                   |     }                     |\n| p.mthd()                  | }                         |\n|                           | const p = new C();        |\n|                           | p.mthd();                 |\n+---------------------------+---------------------------+",
+    "qa": [
+      {
+        "question": "In which language are functions always independent? (js or py)",
+        "answer": "js"
+      },
+      {
+        "question": "Which language automatically binds instance context during method retrieval?",
+        "answer": "py"
+      },
+      {
+        "question": "In which language is p.mthd() not bound?  (js/py)",
+        "answer": "js"
+      },
+      {
+        "question": "Which language always passes a refence explicitly to p as the first parameter?",
+        "answer": "py"
+      },
+      {
+        "question": "How and when does JS pass reference then? Fill in: __________ at ____ time. (Use comma, no whitespace)",
+        "answer": "implicitly,call"
+      },
+      {
+        "question": "Which language needs bind() to bind its reference object?  (py/js)",
+        "answer": "py"
+      },
+      {
+        "question": "Which reference object can be hijacked by another function and when?  Fill in: ____ at ____ time.",
+        "answer": "this,call"
+      }
+    ]
   }
 ]
