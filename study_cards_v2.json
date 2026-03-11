@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "code": "#******* decorators again *******\n\nGiven:\n\ndef decoration\n    def wrapper\n\n",
+    "qa": [
+      {
+        "question": "Write its closest equivalent using new_wrapper and wrapper with no white_space",
+        "answer": "new_wrapper=decoration(wrapper)"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "code": "# ******* @decorator at runtime **********\ndef decorator(func):\n    def wrapper(a, b):\n        return func(a, b) * 7\n    return wrapper\n\n@decorator\ndef add(a, b)\n    return a + b\n\nprint(add(3,4))\n\n",
+    "qa": [
+      {
+        "question": "Which function is the kernel/innermost function?",
+        "answer": "add"
+      },
+      {
+        "question": "Which function is the outermost function?",
+        "answer": "decorator"
+      },
+      {
+        "question": "Which function contains all of the math?",
+        "answer": "wrapper"
+      },
+      {
+        "question": "What is the output?",
+        "answer": "77"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "code": "#***** JS_vs_Py_retrieval_1 *****\n\nCompare JS vs Py retrieval means:  \n\nconst j = prop.attr;      p = attr.mthd\nj();                      p()  \n",
+    "qa": [
+      {
+        "question": "Which operation has no automatic descriptor binding at access time? (js or py)",
+        "answer": "js"
+      },
+      {
+        "question": "Which output uses context at call time instead of binding at access time? (js or py)",
+        "answer": "js"
+      },
+      {
+        "question": "What is the name of the instance reference object?",
+        "answer": "attr"
+      },
+      {
+        "question": "What is the function reference variable name?",
+        "answer": "j"
+      },
+      {
+        "question": "*Bonus question: Internally, which dunder method is invoked first during attribute retrieval and on which object? (Type in exactly separated by a comma with no whitespace)",
+        "answer": "__getattribute__,attr"
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "code": "#*** Python Class vs JavaScript Class ***\n\n+---------------------------+---------------------------+\n| Python                    | JavaScript                |\n+---------------------------+---------------------------+\n| class C:                  | class C {                 |  \n|     def __init__(self):   |     constructor() {       |    \n|         self.x = 10       |         this.x = 10;      |  \n|                           |     }                     |\n|     def mthd(self):       |                           |  \n|         return self.x     |     mthd() {              |\n|                           |         return this.x;    |\n| p = C()                   |     }                     |\n| p.mthd()                  | }                         |\n|                           | const p = new C();        |\n|                           | p.mthd();                 |\n+---------------------------+---------------------------+",
+    "qa": [
+      {
+        "question": "In which language are functions always independent? (js or py)",
+        "answer": "js"
+      },
+      {
+        "question": "Which language automatically binds instance context during method retrieval?",
+        "answer": "py"
+      },
+      {
+        "question": "In which language is p.mthd() not bound?  (js/py)",
+        "answer": "js"
+      },
+      {
+        "question": "Which language always passes a reference explicitly to p as the first parameter?",
+        "answer": "py"
+      },
+      {
+        "question": "How and when does JS pass reference then? Fill in: __________ly  at  ____ time. (Use comma, no whitespace)",
+        "answer": "implicitly,call"
+      },
+      {
+        "question": "Which language needs bind() to bind its reference object?  (py/js)",
+        "answer": "js"
+      },
+      {
+        "question": "Which reference object can be hijacked by another function and when?  Fill in: ____ at ____ time.",
+        "answer": "this,call"
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "code": "#*** Py self vs JS this ***\n\n+-----------------------------+--------------------------------------+\n| Python                      | JavaScript                           |\n+-----------------------------+--------------------------------------+\n| class C:                    | class C {                            |\n|     def __init__():         |     constructor() {                  |\n|         self.self = self    |         this.u = this;               |\n|                             |     }                                |\n|     def mthd():             |     mthd() {                         |\n|         return self.self    |         return this.u;               |\n|                             |     }                                |\n| i = C()  # i = instance     | const i = new C();  // i = instance  |\n|                             |                                      | \n| print(i.mthd())             | console.log(i.mthd());               |\n| print(i.mthd() is i)        | console.log(i.mthd() === i);         |\n+-----------------------------+--------------------------------------+",
+    "qa": [
+      {
+        "question": "What will be the first print output? a)True b)False  c)TypeError d)self  (a,b,c, or d)",
+        "answer": "c"
+      },
+      {
+        "question": "What will be the first console output? a)True b)False c)TypeError d)Circular",
+        "answer": "d"
+      },
+      {
+        "question": "What will be the second print output? a)True b)False c)TypeError d)self",
+        "answer": "c"
+      },
+      {
+        "question": "What will be the second console output?",
+        "answer": "true"
+      },
+      {
+        "question": "Let __init__(self)__ and mthd(self). What will be the first print output? a)TypeError b)self c)<__main__.C address> d)Circular",
+        "answer": "c"
+      },
+      {
+        "question": "Let  __init__(self)__ and mthd(self). What will be the second print output? a)True b)False c)TypeError d)<__main__.C address> e)self",
+        "answer": "a"
+      },
+      {
+        "question": "In which language is i.mthd() not bound?  (js/py)",
+        "answer": "js"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "code": "#**** index filter ****\n\nfiltered = []\n\nfor card in study_bank:\n    cid = int(card['id'])\n    if start <= cid <= end:\n        filtered.append(card)\n",
+    "qa": [
+      {
+        "question": "Which function parses the string and creates an integer?",
+        "answer": "int()"
+      },
+      {
+        "question": "Which is the indexing syntax?",
+        "answer": "card[]"
+      }
+    ]
+  }
+]
