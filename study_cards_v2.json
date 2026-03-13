@@ -138,5 +138,47 @@
         "answer": "card[]"
       }
     ]
+  },
+  {
+    "id": "7",
+    "code": "\\033[34m#******* Python's @dataclass @property *********\\033[0m\n\nfrom dataclasses import dataclass        |# With decorator                       |# Long form w/o decorator                         \n                                         |                                       |\n@dataclass                               |                                       |\nclass Rectangle:                         |  class Rectangle:                     |  class Rectangle:\n    width: int                           |      def __init__(self, w, h):        |      def __init__(self, w, h):\n    height: int                          |          self.width = w               |          self.width = w\n                                         |              self.height = h          |              self.height = h                                            \n    @property                            |                                       |\n    def area(self):                      |              @property                |          def area(self):                               \n        return self.width * self.height  |                  def area(self):      |                           \n                                         |                                       |      return self.width * self.height \nr = Rectangle(4, 5)                      |      return self.width * self.height  |         \n                                         |                                       |      area = property(area)  \nprint(r.area)                            |                                       |\n\n                  # attribute_name = property(method_name)\n",
+    "qa": [
+      {
+        "question": "Which syntax automatically generates __init__, __repr__, and __eq__ methods?",
+        "answer": "@dataclass"
+      },
+      {
+        "question": "Which syntax turns a method into an attribute?",
+        "answer": "@property"
+      },
+      {
+        "question": "Which method() into which .attribute? (comma,no_white_space)",
+        "answer": "area(),.area"
+      },
+      {
+        "question": "In JS a method belongs to any ______, but in Py it belongs only to a ______. (comma,no_white_space)",
+        "answer": "object,class"
+      },
+      {
+        "question": "In Pythonese, what do 'r' and 'area' each stand for in 'r.area'? (comma,no_white_space)",
+        "answer": "instance,attribute"
+      },
+      {
+        "question": "What computed instance attribute does @property create?",
+        "answer": "r.area"
+      },
+      {
+        "question": "What is the long-form equivalent of @property? (no_white_space)",
+        "answer": "attribute = property(function)"
+      },
+      {
+        "question": "Which dunder method does @dataclass automatically generate? (w/o delimiter)",
+        "answer": "__init__"
+      },
+      {
+        "question": "In both Py and JS, any .name() is always a ______ and never an _________ because it is ___able by \\033\\[35mdelimiter\\033\\[0m. (comma,no_white_space)\")",
+        "answer": "method,attribute,callable"
+      }
+    ]
   }
 ]
